@@ -13,7 +13,7 @@ env:
 
 jobs:
   build:
-    name: Build
+    name: Build and Test in Dev
     runs-on: ubuntu-20.04
     env:
       SNOWFLAKE_CUROLOGY_DATABASE: alembic
@@ -32,4 +32,5 @@ jobs:
         working-directory: ./snowflake_migrations
         run: alembic --name data_definitions revision --autogenerate
       - name: apply alembic to dev database
+        working-directory: ./snowflake_migrations
         run: alembic --name data_definitions upgrade head
