@@ -27,3 +27,5 @@ jobs:
       - name: run alembic
         working-directory: ./snowflake_migrations
         run: alembic --name data_definitions revision --autogenerate
+      - name: test
+        run: echo ${{ github.head_ref }}
