@@ -7,12 +7,13 @@ on:
     paths:
       - snowflake_migrations/models/**
 
+env:
+  SNOWFLAKE_URL: ${{ secrets.SNOWFLAKE_DB }}
+
 jobs:
   build:
     name: Build
     runs-on: ubuntu-20.04
-    env:
-      SNOWFLAKE_URL: {{ secrets.SNOWFLAKE_DB }}
     steps:
       - name: checkout
         uses: actions/checkout@v2
