@@ -9,6 +9,7 @@ on:
 
 env:
   SNOWFLAKE_URL: ${{ secrets.SNOWFLAKE_DB }}
+  PYTHONPATH: ${{ github.workspace }}
 
 jobs:
   build:
