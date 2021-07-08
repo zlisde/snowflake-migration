@@ -22,3 +22,4 @@ class SubscribedDays(AuditColumnMixin, Base):
     large_moisturizer = sa.Column(sa.types.NUMERIC)
     large_cleanser = sa.Column(sa.types.NUMERIC)
     large_acne_body_wash = sa.Column(sa.types.NUMERIC)
+    large_hydrocolloid = sa.Column(sa.types.NUMERIC)
