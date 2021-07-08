@@ -30,7 +30,7 @@ jobs:
         run: python3 -m pip install -r requirements.txt
       - name: create alembic test db
         working-directory: ./snowflake_migrations/utils
-        run: python alembic_testcdb_ops.py True
+        run: python alembic_testdb_ops.py True
 
   build:
     name: Build and Test schema change
@@ -71,4 +71,4 @@ jobs:
         run: python3 -m pip install -r requirements.txt
       - name: create alembic test db
         working-directory: ./snowflake_migrations/utils
-        run: python alembic_testcdb_ops.py False
+        run: python alembic_testdb_ops.py False
