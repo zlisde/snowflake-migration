@@ -1,6 +1,7 @@
 import sqlalchemy as sa
 from snowflake_migrations.models.base import Base, AuditColumnMixin
 
+
 class UserLtv(AuditColumnMixin, Base):
 
     __tablename__ = "user_ltv"
@@ -19,5 +20,3 @@ class UserLtv(AuditColumnMixin, Base):
     formula_group = sa.Column(sa.types.TEXT)
     predicted_revenue = sa.Column(sa.types.FLOAT)
     predicted_gp = sa.Column(sa.types.FLOAT)
-
-

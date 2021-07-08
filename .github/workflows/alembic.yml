@@ -10,13 +10,33 @@ on:
 env:
   SNOWFLAKE_URL: ${{ secrets.SNOWFLAKE_URL }}
   PYTHONPATH: ${{ github.workspace }}
+  SNOWFLAKE_CUROLOGY_DATABASE: alembic
+  ALEMBIC_TEST_DB: alembic_test_db
+  SNOWFLAKE_ADMIN_URL: ${{ secrets.SNOWFLAKE_ADMIN_URL }}
+  SNOWFLAKE_ALEMBIC_ROLE: sysadmin
 
 jobs:
+  pre_build:
+    name: create alembic test database
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: install dependency
+        run: python3 -m pip install -r requirements.txt
+      - name: create alembic test db
+        working-directory: ./snowflake_migrations/utils
+        run: python alembic_testcdb_ops.py True
+
   build:
-    name: Build and Test in Dev
+    name: Build and Test schema change
     runs-on: ubuntu-20.04
     env:
-      SNOWFLAKE_CUROLOGY_DATABASE: alembic
+      SNOWFLAKE_ENV: dev
     environment:
       name: dev
     steps:
@@ -34,3 +54,19 @@ jobs:
       - name: apply alembic to dev database
         working-directory: ./snowflake_migrations
         run: alembic --name data_definitions upgrade head
+
+  cleanup_test_db:
+    name: cleanup test db
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: install dependency
+        run: python3 -m pip install -r requirements.txt
+      - name: create alembic test db
+        working-directory: ./snowflake_migrations/utils
+        run: python alembic_testcdb_ops.py False

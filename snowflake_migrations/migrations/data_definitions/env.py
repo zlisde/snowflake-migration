@@ -34,11 +34,17 @@ target_metadata = Base.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
+
 def get_url():
     sf_url = os.getenv("SNOWFLAKE_URL")
-    sf_database = os.getenv("SNOWFLAKE_CUROLOGY_DATABASE")
+    sf_env = os.getenv("SNOWFLAKE_ENV")
+    if sf_env == "prod":
+        sf_database = os.getenv("SNOWFLAKE_CUROLOGY_DATABASE")
+    else:
+        sf_database = os.getenv("ALEMBIC_TEST_DB")
     sf_schema = os.path.basename(pathlib.Path(__file__).parent.resolve())
     return "&".join([sf_url, f"database={sf_database}", f"schema={sf_schema}"])
+
 
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
