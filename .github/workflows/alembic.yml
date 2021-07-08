@@ -28,3 +28,9 @@ jobs:
         working-directory: ./snowflake_migrations
 #        run: alembic --name data_definitions revision --autogenerate
         run: echo $PWD
+      - name: run 2
+        working-directory: ./snowflake_migrations
+        #        run: alembic --name data_definitions revision --autogenerate
+        run: |
+          echo $PWD
+          ls .
