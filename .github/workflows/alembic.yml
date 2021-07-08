@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - snowflake_migrations/models/**
+env:
+  SNOWFLAKE_URL: {{ secrets.SNOWFLAKE_DB }}
 jobs:
   build:
     name: Build
@@ -13,10 +15,13 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-
-      - name: print
-        run: echo  ${{ github.ref }}
-
-      - name: print
-        run: echo "Done"
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: install dependency
+        run: python3 -m pip install -r requirements.txt
+      - name: run alembic
+        working-directory: ./snowflake_migrations
+        run: alembic --name data_definitions revision --autogenerate
 
