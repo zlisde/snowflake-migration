@@ -26,5 +26,5 @@ jobs:
         run: python3 -m pip install -r requirements.txt
       - name: run alembic
         working-directory: ./snowflake_migrations
-        run: alembic --name data_definitions revision --autogenerate
-
+#        run: alembic --name data_definitions revision --autogenerate
+        run: echo $(PWD)
