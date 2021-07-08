@@ -17,6 +17,8 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       SNOWFLAKE_CUROLOGY_DATABASE: alembic
+    environment:
+      name: dev
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -26,8 +28,8 @@ jobs:
           python-version: 3.9
       - name: install dependency
         run: python3 -m pip install -r requirements.txt
-      - name: run alembic
+      - name: run alembic autogenerate
         working-directory: ./snowflake_migrations
         run: alembic --name data_definitions revision --autogenerate
-      - name: test
-        run: echo ${{ github.head_ref }}
+      - name: apply alembic to dev database
+        run: alembic --name data_definitions upgrade head
