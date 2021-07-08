@@ -86,7 +86,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: alembic-artifact
-          path: ./snowflake_migrations
+          path: ./snowflake_migrations/migrations
       - name:
         run: |
           tree .
