@@ -79,11 +79,14 @@ jobs:
         working-directory: ./snowflake_migrations/utils
         run: python alembic_testdb_ops.py False
       - name: remove migrations folder
-        working-directory: ./snowflake_migrations
+        working-directory: ./snowflake_migrations/migrations
         run: |
-          rm -rf migrations
+          rm -rf ./*
       - name: download revision files
         uses: actions/download-artifact@v2
         with:
           name: alembic-artifact
           path: ./snowflake_migrations
+      - name:
+        run: |
+          tree .
