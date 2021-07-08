@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - snowflake_migrations/models
+      - snowflake_migrations/models/**
 jobs:
   build:
     name: Build
