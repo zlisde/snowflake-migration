@@ -6,7 +6,7 @@ Base = declarative_base()
 from sqlalchemy.orm import declarative_mixin
 from sqlalchemy.orm import declared_attr
 
-
+#
 
 @declarative_mixin
 class AuditColumnMixin:
