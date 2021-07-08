@@ -38,8 +38,6 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       SNOWFLAKE_ENV: dev
-    environment:
-      name: dev
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -59,6 +57,8 @@ jobs:
   cleanup_test_db:
     name: cleanup test db
     needs: build
+    environment:
+      name: dev
     runs-on: ubuntu-20.04
     steps:
       - name: checkout
