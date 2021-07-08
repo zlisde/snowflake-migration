@@ -53,9 +53,15 @@ jobs:
       - name: apply alembic to dev database
         working-directory: ./snowflake_migrations
         run: alembic --name data_definitions upgrade head
+      - name: upload revision artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: alembic-artifact
+          path: ./snowflake_migrations/migrations
+          retention-days: 1
 
-  cleanup_test_db:
-    name: cleanup test db
+  post_build:
+    name: cleanup test db and commit artifacts
     needs: build
     environment:
       name: dev
@@ -69,6 +75,15 @@ jobs:
           python-version: 3.9
       - name: install dependency
         run: python3 -m pip install -r requirements.txt
-      - name: create alembic test db
+      - name: drop alembic test db
         working-directory: ./snowflake_migrations/utils
         run: python alembic_testdb_ops.py False
+      - name: remove migrations folder
+        working-directory: ./snowflake_migrations
+        run: |
+          rm -rf migrations
+      - name: download revision files
+        uses: actions/download-artifact@v2
+          with:
+            name: alembic-artifact
+            path: ./snowflake_migrations
