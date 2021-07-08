@@ -17,3 +17,6 @@ jobs:
       - name: print
         run: echo  ${{ github.ref }}
 
+      - name: print
+        run: echo "Done"
+
