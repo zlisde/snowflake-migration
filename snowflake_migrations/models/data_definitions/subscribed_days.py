@@ -24,3 +24,5 @@ class SubscribedDays(AuditColumnMixin, Base):
     large_acne_body_wash = sa.Column(sa.types.NUMERIC)
     large_hydrocolloid = sa.Column(sa.types.NUMERIC)
     large_dark_spot_formula	= sa.Column(sa.types.NUMERIC)
+	large_future_formula = sa.Column(sa.types.NUMERIC)
+
