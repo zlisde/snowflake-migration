@@ -1,0 +1,30 @@
+name: snowflake schema change deployment
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - snowflake_migrations/migrations/**
+env:
+  SNOWFLAKE_URL: ${{ secrets.SNOWFLAKE_URL }}
+  PYTHONPATH: ${{ github.workspace }}
+  SNOWFLAKE_CUROLOGY_DATABASE: alembic
+
+
+jobs:
+  deployments:
+    name: deploy schema change
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: install dependency
+        run: python3 -m pip install -r requirements.txt
+      - name: deploy change
+        working-directory: ./snowflake_migrations
+        run: alembic --name data_definitions upgrade head

@@ -1,4 +1,4 @@
-name: snowflake schema change
+name: snowflake schema change check
 
 on:
   pull_request:
@@ -87,6 +87,10 @@ jobs:
         with:
           name: alembic-artifact
           path: ./snowflake_migrations/migrations
-      - name:
-        run: |
-          tree .
+      - name: commit artifact file
+        uses: EndBug/add-and-commit@v7
+        with:
+          message: 'Add alembic revision files'
+          branch: ${{ github.head_ref }}
+          add: '*.py'
+          cwd: './snowflake_migrations/migrations/'
