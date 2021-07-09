@@ -1,0 +1,96 @@
+name: snowflake schema change check
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - snowflake_migrations/models/**
+
+env:
+  SNOWFLAKE_URL: ${{ secrets.SNOWFLAKE_URL }}
+  PYTHONPATH: ${{ github.workspace }}
+  SNOWFLAKE_CUROLOGY_DATABASE: alembic
+  ALEMBIC_TEST_DB: alembic_test_db
+  SNOWFLAKE_ADMIN_URL: ${{ secrets.SNOWFLAKE_ADMIN_URL }}
+  SNOWFLAKE_ALEMBIC_ROLE: sysadmin
+
+jobs:
+  pre_build:
+    name: create alembic test database
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: install dependency
+        run: python3 -m pip install -r requirements.txt
+      - name: create alembic test db
+        working-directory: ./snowflake_migrations/utils
+        run: python alembic_testdb_ops.py True
+
+  build:
+    name: Build and Test schema change
+    needs: pre_build
+    runs-on: ubuntu-20.04
+    env:
+      SNOWFLAKE_ENV: dev
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: install dependency
+        run: python3 -m pip install -r requirements.txt
+      - name: run alembic autogenerate
+        working-directory: ./snowflake_migrations
+        run: alembic --name data_definitions revision --autogenerate
+      - name: apply alembic to dev database
+        working-directory: ./snowflake_migrations
+        run: alembic --name data_definitions upgrade head
+      - name: upload revision artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: alembic-artifact
+          path: ./snowflake_migrations/migrations
+          retention-days: 1
+
+  post_build:
+    name: cleanup test db and commit artifacts
+    needs: build
+    environment:
+      name: dev
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: install dependency
+        run: python3 -m pip install -r requirements.txt
+      - name: drop alembic test db
+        working-directory: ./snowflake_migrations/utils
+        run: python alembic_testdb_ops.py False
+      - name: remove migrations folder
+        working-directory: ./snowflake_migrations/migrations
+        run: |
+          rm -rf ./*
+      - name: download revision files
+        uses: actions/download-artifact@v2
+        with:
+          name: alembic-artifact
+          path: ./snowflake_migrations/migrations
+      - name: commit artifact file
+        uses: EndBug/add-and-commit@v7
+        with:
+          message: 'Add alembic revision files'
+          branch: ${{ github.head_ref }}
+          add: '*.py'
+          cwd: './snowflake_migrations/migrations/'

@@ -1,6 +1,8 @@
+import os
+import pathlib
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
+from sqlalchemy import create_engine
 from sqlalchemy import pool
 
 from alembic import context
@@ -14,9 +16,7 @@ class SnowflakeImpl(DefaultImpl):
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-config.set_section_option(
-    section, "SNOWFLAKE_URL", os.environ.get("SNOWFLAKE_URL")
-)
+
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
@@ -35,6 +35,17 @@ target_metadata = Base.metadata
 # ... etc.
 
 
+def get_url():
+    sf_url = os.getenv("SNOWFLAKE_URL")
+    sf_env = os.getenv("SNOWFLAKE_ENV")
+    if sf_env == "prod":
+        sf_database = os.getenv("SNOWFLAKE_CUROLOGY_DATABASE")
+    else:
+        sf_database = os.getenv("ALEMBIC_TEST_DB")
+    sf_schema = os.path.basename(pathlib.Path(__file__).parent.resolve())
+    return "&".join([sf_url, f"database={sf_database}", f"schema={sf_schema}"])
+
+
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
 
@@ -47,7 +58,7 @@ def run_migrations_offline():
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = get_url()
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -73,12 +84,7 @@ def run_migrations_online():
             if script.upgrade_ops.is_empty():
                 directives[:] = []
 
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-    )
-
+    connectable = create_engine(get_url())
     with connectable.connect() as connection:
         context.configure(
             connection=connection,
