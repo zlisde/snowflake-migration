@@ -16,6 +16,8 @@ jobs:
   deployments:
     name: deploy schema change
     runs-on: ubuntu-20.04
+    env:
+      SNOWFLAKE_ENV: prod
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -25,6 +27,8 @@ jobs:
           python-version: 3.9
       - name: install dependency
         run: python3 -m pip install -r requirements.txt
+      - name: check
+        run: tree ./snowflake_migrations/migrations
       - name: deploy change
         working-directory: ./snowflake_migrations
         run: alembic --name data_definitions upgrade head

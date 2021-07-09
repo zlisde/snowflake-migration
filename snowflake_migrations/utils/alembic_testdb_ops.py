@@ -1,11 +1,11 @@
 import os
 import sqlalchemy as sa
 import argparse
-
+from distutils.util import strtobool
 
 
 def testdb_create(create_test_db):
-    snowflake_url = os.getenv("SNOWFLAKE_URL")
+    snowflake_url = os.getenv("SNOWFLAKE_ADMIN_URL")
     target_db_name = os.getenv("SNOWFLAKE_CUROLOGY_DATABASE")
     alembic_test_db = os.getenv("ALEMBIC_TEST_DB")
     sf_engine = sa.create_engine(snowflake_url)
@@ -26,10 +26,10 @@ def testdb_create(create_test_db):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("create_test_db", type=bool,
+    parser.add_argument("createdb", type=strtobool,
                         help="Create test db")
     args = parser.parse_args()
-    if args.create_test_db:
+    if args.createdb:
         testdb_create(True)
     else:
         testdb_create(False)
