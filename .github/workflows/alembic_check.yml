@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+        with:
+         fetch-depth: 0
       - name: Setup python
         uses: actions/setup-python@v2
         with:
@@ -107,6 +109,8 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          fetch_depth: 0
       - name: Setup python
         uses: actions/setup-python@v2
         with:
