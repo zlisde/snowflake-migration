@@ -42,10 +42,10 @@ jobs:
     env:
       SNOWFLAKE_ENV: dev
     steps:
-      - name: clean
-        run: rm -rf ${{ github.workspace }}
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          fetch_depth: 0
 
       - name: Setup python
         uses: actions/setup-python@v2
