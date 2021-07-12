@@ -47,7 +47,9 @@ jobs:
           file_list="${{ steps.changed-files.outputs.all_modified_files }}"
           for file in $file_list; do
             dname=$(basename "$(dirname $file)")
-            dir_list+=("$dname")
+            if [[ $dname != "models" ]]; then
+                dir_list+=("$dname")
+            fi
           done
           sorted_unique_dns=($(echo "${dir_list[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
           echo "${sorted_unique_dns[@]}"
