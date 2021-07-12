@@ -40,13 +40,13 @@ jobs:
             dname=$(basename "$(dirname $file)")
             dir_list+=($dname)
           done
-
+          echo $dir_list
           sorted_unique_dns=($(echo "${dir_list[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
           echo $sorted_unique_dns
           echo "::set-output name=unique_dir::$sorted_unique_dns"
       - name: get file
         run: |
-          for file in "${{ steps.list_file.outputs.unique_dir }}; do
+          for file in "${{ steps.list_file.outputs.unique_dir }}"; do
             echo $file
           done
 
