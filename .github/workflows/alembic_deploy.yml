@@ -30,6 +30,7 @@ jobs:
           python-version: 3.9
 
       - name: install dependency
+        working-directory: ./snowflake_migrations
         run: python3 -m pip install -r requirements.txt
 
       - name: check
