@@ -29,7 +29,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-      - name:
+      - name: check files
         run: tree ./snowflake_migrations/migrations
       - name: install dependency
         run: python3 -m pip install -r requirements.txt
@@ -56,7 +56,7 @@ jobs:
       - name: install dependency
         run: python3 -m pip install -r requirements.txt
 
-      - name:
+      - name: check files
         run: tree ./snowflake_migrations/migrations
 
       - name: Get changed files
