@@ -12,4 +12,4 @@ class Retention(AuditColumnMixin, Base):
     retention_days = sa.Column(sa.types.NUMERIC)
     date_param = sa.Column(sa.types.TEXT)
     brand_id = sa.Column(sa.NUMERIC)
-    # retention_rate = sa.Column(sa.FLOAT)
+    retention_rate = sa.Column(sa.FLOAT)
