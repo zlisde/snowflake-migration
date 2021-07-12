@@ -51,6 +51,9 @@ jobs:
       - name: install dependency
         run: python3 -m pip install -r requirements.txt
 
+      - name:
+        run: tree ./snowflake_migrations/migrations
+
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v8.4
