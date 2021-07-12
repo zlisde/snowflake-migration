@@ -6,7 +6,7 @@ class UserLtv(AuditColumnMixin, Base):
 
     __tablename__ = "user_ltv"
     __table_args__ = {"schema": "dm_datascience", "extend_existing": True}
-#test111
+#test1111
     row_id = sa.Column(
         sa.types.BIGINT,
         autoincrement=True,
