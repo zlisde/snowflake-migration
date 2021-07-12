@@ -75,15 +75,17 @@ jobs:
       - name: run alembic autogenerate
         working-directory: ./snowflake_migrations
         run: |
-          for schema in "${{ steps.list_schema_name.outputs.unique_dir }}"; do
+          changed_schemas="${{ steps.list_schema_name.outputs.unique_dir }}"
+          for schema in $changed_schemas; do
             alembic --name $schema revision --autogenerate
           done
 
       - name: apply alembic to dev database
         working-directory: ./snowflake_migrations
         run: |
-          for schema in "${{ steps.list_schema_name.outputs.unique_dir }}"; do
-          alembic --name $schema upgrade head
+          changed_schemas="${{ steps.list_schema_name.outputs.unique_dir }}"
+          for schema in $changed_schemas; do
+            alembic --name $schema upgrade head
           done
 
       - name: upload revision artifacts
