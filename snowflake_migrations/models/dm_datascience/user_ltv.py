@@ -17,4 +17,4 @@ class UserLtv(AuditColumnMixin, Base):
     signup_plan = sa.Column(sa.types.TEXT)
     formula_group = sa.Column(sa.types.TEXT)
     predicted_revenue = sa.Column(sa.types.FLOAT)
-    # predicted_gp = sa.Column(sa.types.FLOAT)
+    predicted_gp = sa.Column(sa.types.FLOAT)
