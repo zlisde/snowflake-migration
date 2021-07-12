@@ -15,16 +15,6 @@ env:
   SNOWFLAKE_ADMIN_URL: ${{ secrets.SNOWFLAKE_ADMIN_URL }}
   SNOWFLAKE_ALEMBIC_ROLE: sysadmin
 
-jobs:
-  get_change:
-    name: get changed files
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
-
-
 
 jobs:
   pre_build:
