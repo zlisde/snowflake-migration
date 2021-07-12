@@ -89,7 +89,8 @@ def run_migrations_online():
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
-            version_table_schema=sf_schema,
+            version_table_schema="utility",
+            version_table_name=f'{sf_schema}_alembic_version',
             process_revision_directives=process_revision_directives,
             compare_types=True,
         )
