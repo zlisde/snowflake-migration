@@ -25,7 +25,7 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from snowflake_migrations.models.base import Base
+from snowflake_migrations.models.dm_datascience.base import Base
 from snowflake_migrations.models import dm_datascience
 
 target_metadata = Base.metadata
