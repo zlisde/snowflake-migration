@@ -37,6 +37,7 @@ jobs:
         run: |
           dir_list=()
           for file in "${{ steps.changed-files.outputs.all_modified_files }}"; do
+            echo $file
             dname=$(basename "$(dirname $file)")
             dir_list+=($dname)
           done
