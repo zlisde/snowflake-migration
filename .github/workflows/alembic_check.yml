@@ -36,7 +36,8 @@ jobs:
         working-directory: ./snowflake_migrations
         run: |
           dir_list=()
-          for file in "${{ steps.changed-files.outputs.all_modified_files }}"; do
+          file_list="${{ steps.changed-files.outputs.all_modified_files }}"
+          for file in $file_list; do
             dname=$(basename "$(dirname $file)")
             dir_list+=("$dname")
           done
