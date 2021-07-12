@@ -1,7 +1,7 @@
 import sqlalchemy as sa
 from snowflake_migrations.models.base import Base, AuditColumnMixin
 
-#test
+#test1
 class SubscribedDays(AuditColumnMixin, Base):
 
     __tablename__ = "subscribed_days"
