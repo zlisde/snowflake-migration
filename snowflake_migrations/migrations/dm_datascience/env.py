@@ -89,7 +89,7 @@ def run_migrations_online():
             connection=connection,
             target_metadata=target_metadata,
             version_table_schema = "utility",
-            version_table_name = f'{sf_schema}_alembic_version',
+            version_table = f'{sf_schema}_alembic_version',
             process_revision_directives=process_revision_directives,
             compare_types=True,
         )
