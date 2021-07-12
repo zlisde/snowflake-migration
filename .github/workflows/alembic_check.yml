@@ -38,9 +38,9 @@ jobs:
           dir_list=()
           for file in "${{ steps.changed-files.outputs.all_modified_files }}"; do
             dname=$(basename "$(dirname $file)")
-            dir_list+=($dname)
+            dir_list+=("$dname")
           done
-          echo $dir_list
+          echo "${dir_list[@]}"
           sorted_unique_dns=($(echo "${dir_list[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
           echo "${sorted_unique_dns[@]}"
           echo "::set-output name=unique_dir::${sorted_unique_dns[@]}"
