@@ -32,10 +32,24 @@ jobs:
             snowflake_migrations/models
 
       - name: List all modified files
+        id: list_file
+        working-directory: ./snowflake_migrations
         run: |
+          dir_list=()
           for file in "${{ steps.changed-files.outputs.all_modified_files }}"; do
-            echo "$file was modified"
+            dname=$(basename $(dirname $file))
+            dir_list+=($dname)
           done
+
+          sorted_unique_dns=($(echo "${dir_list[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+          echo "::set-output name=unique_dir::$sorted_unique_dns"
+      - name: get file
+        run: |
+          for file in "${{ steps.list_file.outputs.unique_dir }}; do
+            echo $file
+          done
+
+
 #jobs:
 #  pre_build:
 #    name: create alembic test database
