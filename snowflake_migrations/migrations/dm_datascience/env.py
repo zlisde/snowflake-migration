@@ -33,6 +33,16 @@ target_metadata = Base.metadata
 # ... etc.
 
 
+def get_url():
+    sf_url = os.getenv("SNOWFLAKE_URL")
+    sf_env = os.getenv("SNOWFLAKE_ENV")
+    if sf_env == "prod":
+        sf_database = os.getenv("SNOWFLAKE_CUROLOGY_DATABASE")
+    else:
+        sf_database = os.getenv("ALEMBIC_TEST_DB")
+    sf_schema = os.path.basename(pathlib.Path(__file__).parent.resolve())
+    return "&".join([sf_url, f"database={sf_database}", f"schema={sf_schema}"])
+
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
 
@@ -64,7 +74,7 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-
+    sf_schema = os.path.basename(pathlib.Path(__file__).parent.resolve())
     def process_revision_directives(context, revision, directives):
         if config.cmd_opts.autogenerate:
             script = directives[0]
@@ -81,7 +91,7 @@ def run_migrations_online():
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
-            version_table_schema="public",
+            version_table_schema=sf_schema,
             process_revision_directives=process_revision_directives,
             compare_types=True,
         )
