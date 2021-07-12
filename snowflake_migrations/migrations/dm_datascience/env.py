@@ -1,6 +1,8 @@
+import os
+import pathlib
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
+from sqlalchemy import create_engine
 from sqlalchemy import pool
 
 from alembic import context
@@ -23,7 +25,7 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from snowflake_migrations.models.base import Base
+from snowflake_migrations.models.dm_datascience.base import Base
 from snowflake_migrations.models import dm_datascience
 
 target_metadata = Base.metadata
@@ -32,6 +34,16 @@ target_metadata = Base.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
+
+def get_url():
+    sf_url = os.getenv("SNOWFLAKE_URL")
+    sf_env = os.getenv("SNOWFLAKE_ENV")
+    if sf_env == "prod":
+        sf_database = os.getenv("SNOWFLAKE_CUROLOGY_DATABASE")
+    else:
+        sf_database = os.getenv("ALEMBIC_TEST_DB")
+    sf_schema = os.path.basename(pathlib.Path(__file__).parent.resolve())
+    return "&".join([sf_url, f"database={sf_database}", f"schema={sf_schema}"])
 
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
@@ -45,7 +57,7 @@ def run_migrations_offline():
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = get_url()
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -64,24 +76,20 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-
+    sf_schema = os.path.basename(pathlib.Path(__file__).parent.resolve())
     def process_revision_directives(context, revision, directives):
         if config.cmd_opts.autogenerate:
             script = directives[0]
             if script.upgrade_ops.is_empty():
                 directives[:] = []
 
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-    )
-
+    connectable = create_engine(get_url())
     with connectable.connect() as connection:
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
-            version_table_schema="public",
+            version_table_schema = "utility",
+            version_table = f'{sf_schema}_alembic_version',
             process_revision_directives=process_revision_directives,
             compare_types=True,
         )

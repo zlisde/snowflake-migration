@@ -21,14 +21,44 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+
       - name: Setup python
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
       - name: install dependency
         run: python3 -m pip install -r requirements.txt
+
       - name: check
         run: tree ./snowflake_migrations/migrations
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v8.4
+        with:
+          files: |
+            snowflake_migrations/models
+
+      - name: get unique schema name
+        id: list_schema_name
+        working-directory: ./snowflake_migrations
+        run: |
+          dir_list=()
+          file_list="${{ steps.changed-files.outputs.all_modified_files }}"
+          for file in $file_list; do
+            dname=$(basename "$(dirname $file)")
+            if [[ $dname != "models" ]]; then
+                dir_list+=("$dname")
+            fi
+          done
+          sorted_unique_dns=($(echo "${dir_list[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+          echo "${sorted_unique_dns[@]}"
+          echo "::set-output name=unique_dir::${sorted_unique_dns[@]}"
+
       - name: deploy change
         working-directory: ./snowflake_migrations
-        run: alembic --name data_definitions upgrade head
+        run: |
+          changed_schemas="${{ steps.list_schema_name.outputs.unique_dir }}"
+          for schema in $changed_schemas; do
+            alembic --name $schema upgrade head
+          done

@@ -1,16 +1,14 @@
 import sqlalchemy as sa
-from snowflake_migrations.models.base import Base, AuditColumnMixin
+from snowflake_migrations.models.base import AuditColumnMixin
+from snowflake_migrations.models.dm_datascience.base import Base
 
 
 class UserLtv(AuditColumnMixin, Base):
 
     __tablename__ = "user_ltv"
     __table_args__ = {"schema": "dm_datascience", "extend_existing": True}
+#test11111
 
-    row_id = sa.Column(
-        sa.types.BIGINT,
-        autoincrement=True,
-    )
     user_id = sa.Column(sa.types.BIGINT)
     consultation_completed_date = sa.Column(sa.types.DATE)
     consultation_completed_month = sa.Column(sa.types.DATE)

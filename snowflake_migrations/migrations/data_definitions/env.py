@@ -25,7 +25,7 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from snowflake_migrations.models.base import Base
+from snowflake_migrations.models.data_definitions.base import Base
 from snowflake_migrations.models import data_definitions
 
 target_metadata = Base.metadata
@@ -77,7 +77,7 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-
+    sf_schema = os.path.basename(pathlib.Path(__file__).parent.resolve())
     def process_revision_directives(context, revision, directives):
         if config.cmd_opts.autogenerate:
             script = directives[0]
@@ -89,7 +89,8 @@ def run_migrations_online():
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
-            version_table_schema="public",
+            version_table_schema="utility",
+            version_table=f'{sf_schema}_alembic_version',
             process_revision_directives=process_revision_directives,
             compare_types=True,
         )
