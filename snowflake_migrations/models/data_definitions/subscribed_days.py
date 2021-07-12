@@ -1,6 +1,6 @@
 import sqlalchemy as sa
-from snowflake_migrations.models.base import Base, AuditColumnMixin
-
+from snowflake_migrations.models.base import  AuditColumnMixin
+from snowflake_migrations.models.data_definitions.base import Base
 #test1
 class SubscribedDays(AuditColumnMixin, Base):
 

@@ -1,5 +1,6 @@
 import sqlalchemy as sa
-from snowflake_migrations.models.base import Base, AuditColumnMixin
+from snowflake_migrations.models.base import AuditColumnMixin
+from snowflake_migrations.models.dm_datascience import Base
 
 
 class UserLtv(AuditColumnMixin, Base):
