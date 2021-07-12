@@ -77,7 +77,7 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-
+    sf_schema = os.path.basename(pathlib.Path(__file__).parent.resolve())
     def process_revision_directives(context, revision, directives):
         if config.cmd_opts.autogenerate:
             script = directives[0]
@@ -89,7 +89,7 @@ def run_migrations_online():
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
-            version_table_schema="public",
+            version_table_schema=sf_schema,
             process_revision_directives=process_revision_directives,
             compare_types=True,
         )
