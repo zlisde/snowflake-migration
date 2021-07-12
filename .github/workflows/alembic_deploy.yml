@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
 
       - name: Setup python
         uses: actions/setup-python@v2
