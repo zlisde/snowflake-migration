@@ -8,11 +8,11 @@ on:
       - snowflake_migrations/models/**
 
 env:
-  SNOWFLAKE_URL: '{"account":"qba55687", "user":"snowchange", "password":"Snowchange1234", "warehouse":"compute_wh", "role":"sysadmin"}'
+  SNOWFLAKE_URL: '${{ secrets.SNOWFLAKE_URL }}'
   PYTHONPATH: ${{ github.workspace }}
   SNOWFLAKE_CUROLOGY_DATABASE: alembic
   ALEMBIC_TEST_DB: alembic_test_db
-  SNOWFLAKE_ADMIN_URL: '{"account":"qba55687", "user":"snowchange", "password":"Snowchange1234", "warehouse":"compute_wh", "role":"sysadmin"}'
+  SNOWFLAKE_ADMIN_URL: '${{ secrets.SNOWFLAKE_ADMIN_URL }}'
   SNOWFLAKE_ALEMBIC_ROLE: sysadmin
 
 
