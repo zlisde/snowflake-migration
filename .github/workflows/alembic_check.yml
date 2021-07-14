@@ -8,7 +8,7 @@ on:
       - snowflake_migrations/models/**
 
 env:
-  SNOWFLAKE_URL: ${{ secrets.SNOWFLAKE_URL }}
+  SNOWFLAKE_URL: '{"account":"qba55687", "user":"snowchange", "password":"Snowchange1234", "warehouse":"compute_wh", "role":"sysadmin"}'
   PYTHONPATH: ${{ github.workspace }}
   SNOWFLAKE_CUROLOGY_DATABASE: alembic
   ALEMBIC_TEST_DB: alembic_test_db
