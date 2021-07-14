@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 def testdb_create(create_test_db):
-    snowflake_dburl = base64.decode(os.getenv("SNOWFLAKE_ADMIN_URL")).decode('utf-8')
+    snowflake_dburl = base64.b64decode(os.getenv("SNOWFLAKE_ADMIN_URL")).decode('utf-8')
     target_db_name = os.getenv("SNOWFLAKE_CUROLOGY_DATABASE")
     alembic_test_db = os.getenv("ALEMBIC_TEST_DB")
     print(snowflake_dburl)
