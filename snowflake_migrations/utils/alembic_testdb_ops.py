@@ -1,4 +1,5 @@
 import argparse
+import base64
 import json
 import os
 from distutils.util import strtobool
@@ -9,7 +10,7 @@ import sqlalchemy as sa
 
 
 def testdb_create(create_test_db):
-    snowflake_dburl = os.getenv("SNOWFLAKE_ADMIN_URL")
+    snowflake_dburl = base64.decode(os.getenv("SNOWFLAKE_ADMIN_URL")).decode('utf-8')
     target_db_name = os.getenv("SNOWFLAKE_CUROLOGY_DATABASE")
     alembic_test_db = os.getenv("ALEMBIC_TEST_DB")
     print(snowflake_dburl)
