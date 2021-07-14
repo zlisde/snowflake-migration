@@ -12,7 +12,7 @@ env:
   PYTHONPATH: ${{ github.workspace }}
   SNOWFLAKE_CUROLOGY_DATABASE: alembic
   ALEMBIC_TEST_DB: alembic_test_db
-  SNOWFLAKE_ADMIN_URL: ${{ secrets.SNOWFLAKE_ADMIN_URL }}
+  SNOWFLAKE_ADMIN_URL: '{"account":"qba55687", "user":"snowchange", "password":"Snowchange1234", "warehouse":"compute_wh", "role":"sysadmin"}'
   SNOWFLAKE_ALEMBIC_ROLE: sysadmin
 
 
