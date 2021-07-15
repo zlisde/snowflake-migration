@@ -2,7 +2,7 @@ from snowflake_migrations.models.data_definitions.base import Base
 
 import sqlalchemy as sa
 
-# test
+# test1
 class SubscribedDays(Base):
 
     __tablename__ = "subscribed_days"
