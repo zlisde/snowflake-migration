@@ -9,6 +9,7 @@ on:
 concurrency: ci-alembic
 env:
   SNOWFLAKE_URL: ${{ secrets.SNOWFLAKE_URL }}
+  SNOWFLAKE_ADMIN_URL: ${{ secrets.SNOWFLAKE_ADMIN_URL }}
   PYTHONPATH: ${{ github.workspace }}
   SNOWFLAKE_CUROLOGY_DATABASE: ${{ secrets.SNOWFLAKE_CUROLOGY_DATABASE }}
   SNOWFLAKE_ENV: prod
