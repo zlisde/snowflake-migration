@@ -29,8 +29,8 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from snowflake_migrations.models.data_definitions.base import Base  # noqa E402
-from snowflake_migrations.models import data_definitions  # noqa E402
+from snowflake_migrations.models.data_science.base import Base  # noqa E402
+from snowflake_migrations.models import data_science  # noqa E402
 
 target_metadata = Base.metadata
 # other values from the config, defined by the needs of env.py,

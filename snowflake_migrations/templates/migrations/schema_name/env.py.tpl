@@ -1,12 +1,16 @@
+import json
 import os
 import pathlib
 from logging.config import fileConfig
 
-from sqlalchemy import create_engine
-from sqlalchemy import pool
-
 from alembic import context
 from alembic.ddl.impl import DefaultImpl
+
+from snowflake.sqlalchemy import URL
+
+from snowflake_migrations.utils.alembic_testdb_ops import decode_url
+
+from sqlalchemy import create_engine
 
 
 class SnowflakeImpl(DefaultImpl):
@@ -25,8 +29,8 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from snowflake_migrations.models.dm_datascience.base import Base
-from snowflake_migrations.models import dm_datascience
+from snowflake_migrations.models.{schema_name}.base import Base  # noqa E402
+from snowflake_migrations.models import {schema_name}  # noqa E402
 
 target_metadata = Base.metadata
 # other values from the config, defined by the needs of env.py,
@@ -36,14 +40,17 @@ target_metadata = Base.metadata
 
 
 def get_url():
-    sf_url = os.getenv("SNOWFLAKE_URL")
+    sf_url_dict = json.loads(decode_url("SNOWFLAKE_URL"))
     sf_env = os.getenv("SNOWFLAKE_ENV")
     if sf_env == "prod":
         sf_database = os.getenv("SNOWFLAKE_CUROLOGY_DATABASE")
     else:
         sf_database = os.getenv("ALEMBIC_TEST_DB")
     sf_schema = os.path.basename(pathlib.Path(__file__).parent.resolve())
-    return "&".join([sf_url, f"database={sf_database}", f"schema={sf_schema}"])
+    sf_url_dict["database"] = sf_database
+    sf_url_dict["schema"] = sf_schema
+    return sf_url_dict
+
 
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
@@ -57,9 +64,9 @@ def run_migrations_offline():
     script output.
 
     """
-    url = get_url()
+    connectable = create_engine(URL(**get_url()))
     context.configure(
-        url=url,
+        connection=connectable.connect(),
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -77,19 +84,20 @@ def run_migrations_online():
 
     """
     sf_schema = os.path.basename(pathlib.Path(__file__).parent.resolve())
+
     def process_revision_directives(context, revision, directives):
         if config.cmd_opts.autogenerate:
             script = directives[0]
             if script.upgrade_ops.is_empty():
                 directives[:] = []
 
-    connectable = create_engine(get_url())
+    connectable = create_engine(URL(**get_url()))
     with connectable.connect() as connection:
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
-            version_table_schema = "utility",
-            version_table = f'{sf_schema}_alembic_version',
+            version_table_schema="utility",
+            version_table=f"{sf_schema}_alembic_version",
             process_revision_directives=process_revision_directives,
             compare_types=True,
         )

@@ -1,13 +1,13 @@
-import sqlalchemy as sa
 from snowflake_migrations.models.base import AuditColumnMixin
-from snowflake_migrations.models.dm_datascience.base import Base
+from snowflake_migrations.models.data_science.base import Base
+
+import sqlalchemy as sa
 
 
 class UserLtv(AuditColumnMixin, Base):
 
     __tablename__ = "user_ltv"
-    __table_args__ = {"schema": "dm_datascience", "extend_existing": True}
-#test11111
+    __table_args__ = {"schema": "data_science", "extend_existing": True}
 
     user_id = sa.Column(sa.types.BIGINT)
     consultation_completed_date = sa.Column(sa.types.DATE)

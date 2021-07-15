@@ -1,16 +1,19 @@
-import sqlalchemy as sa
-from snowflake_migrations.models.base import  AuditColumnMixin
 from snowflake_migrations.models.data_definitions.base import Base
-#test1
-class SubscribedDays(AuditColumnMixin, Base):
+
+import sqlalchemy as sa
+
+
+class SubscribedDays(Base):
 
     __tablename__ = "subscribed_days"
     __table_args__ = {"schema": "data_definitions", "extend_existing": True}
 
-    user_id = sa.Column(sa.types.NUMERIC)
+    _lattice_exec_date_utc = sa.Column(sa.types.TIMESTAMP)
+    _snowflake_synced_utc = sa.Column(sa.types.TIMESTAMP)
+    user_id = sa.Column(sa.types.NUMERIC, primary_key=True)
     date_pt = sa.Column(sa.types.DATE)
     was_paused = sa.Column(sa.types.BOOLEAN)
-    consultaion_completed_at = sa.Column(sa.types.TIMESTAMP)
+    consultation_completed_at = sa.Column(sa.types.TIMESTAMP)
     first_shipment_delivered_at = sa.Column(sa.types.TIMESTAMP)
     first_full_payment_charged_at = sa.Column(sa.types.TIMESTAMP)
     referrer_type = sa.Column(sa.types.TEXT)
@@ -23,5 +26,5 @@ class SubscribedDays(AuditColumnMixin, Base):
     large_cleanser = sa.Column(sa.types.NUMERIC)
     large_acne_body_wash = sa.Column(sa.types.NUMERIC)
     large_hydrocolloid = sa.Column(sa.types.NUMERIC)
-    large_dark_spot_formula	= sa.Column(sa.types.NUMERIC)
+    large_dark_spot_formula = sa.Column(sa.types.NUMERIC)
     large_future_formula = sa.Column(sa.types.NUMERIC)
