@@ -12,6 +12,7 @@ env:
   SNOWFLAKE_ADMIN_URL: ${{ secrets.SNOWFLAKE_ADMIN_URL }}
   PYTHONPATH: ${{ github.workspace }}
   SNOWFLAKE_CUROLOGY_DATABASE: ${{ secrets.SNOWFLAKE_CUROLOGY_DATABASE }}
+  ALEMBIC_TEST_DB: ${{ secrets.ALEMBIC_TEST_DB }}
   SNOWFLAKE_ENV: prod
 
 jobs:

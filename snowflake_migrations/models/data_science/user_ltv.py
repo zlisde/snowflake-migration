@@ -3,7 +3,7 @@ from snowflake_migrations.models.data_science.base import Base
 
 import sqlalchemy as sa
 
-# test1
+# test11
 class UserLtv(AuditColumnMixin, Base):
 
     __tablename__ = "user_ltv"
