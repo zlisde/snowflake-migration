@@ -1,9 +1,9 @@
 # flake8: noqa
 """empty message
 
-Revision ID: 71c28b6cd7ea
+Revision ID: e9588d9ec1e9
 Revises: 
-Create Date: 2021-07-15 04:27:50.423156
+Create Date: 2021-07-15 04:49:55.747177
 
 """
 from alembic import op
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = "71c28b6cd7ea"
+revision = "e9588d9ec1e9"
 down_revision = None
 branch_labels = None
 depends_on = None
