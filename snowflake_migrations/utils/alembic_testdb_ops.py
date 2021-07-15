@@ -18,6 +18,7 @@ def testdb_create(create_test_db):
     snowflake_url = decode_url("SNOWFLAKE_ADMIN_URL")
     target_db_name = os.getenv("SNOWFLAKE_CUROLOGY_DATABASE")
     alembic_test_db = os.getenv("ALEMBIC_TEST_DB")
+    print(snowflake_url)
     sf_engine = sa.create_engine(URL(**json.loads(snowflake_url)))
     sf_alembic_role = os.getenv("SNOWFLAKE_ALEMBIC_ROLE")
     with sf_engine.connect() as conn:
